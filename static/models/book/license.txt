@@ -1,0 +1,11 @@
+Model Information:
+* title:	SIMPLE Book Prop [FREE]
+* source:	https://sketchfab.com/3d-models/simple-book-prop-free-0574df9de0884e7da4564f37fe37e439
+* author:	Agustín Hönnun (https://sketchfab.com/Agustin_Honnun)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "SIMPLE Book Prop [FREE]" (https://sketchfab.com/3d-models/simple-book-prop-free-0574df9de0884e7da4564f37fe37e439) by Agustín Hönnun (https://sketchfab.com/Agustin_Honnun) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

@@ -22,7 +22,8 @@ html
     letter-spacing: .25em;
     position: fixed;
     top: 0rem;
-    left: 2vw;
+    left: 0;
+    width: 140px;
     /* transform: translateX(-50%); */
     margin-left: 0.5px;
     height: 100%;
@@ -30,9 +31,11 @@ html
     display: flex;
     flex-direction: column;
     padding-right: 8px;
+    z-index: 10;
 }
 
 .caption {
+    padding-left: 8px;
     margin-top: 5vh;
     opacity: .5;
     text-align: right;
@@ -40,11 +43,24 @@ html
     transition: opacity .625s;
 }
 
+#dot {
+    position: absolute;
+    top: 65px;
+    left: 141px;
+    height: 16px;
+    width: 16px;
+    background-color: #C1C0AB;
+    border-radius: 50%;
+    display: inline-block;
+}
+
 .section
 {
     font-family: ShipleyRegular;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    /* align-items: center; */
     height: 100vh;
     position: relative;
     color: #3E4040;
@@ -53,7 +69,64 @@ html
     padding-right: 10%;
 }
 
+.section:nth-of-type(2), .section:nth-of-type(3) {
+    height: 150vh;
+}
+
+
+.section p, li {
+    font-size: 2vmin;
+    width: 70%;
+}
+
+ol {list-style-position: inside;}
+
 section:nth-child(even)
 {
-    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.navigator a {
+    text-decoration: none; /* no underline */
+    color: #92A392;
+}
+
+.publicationSection {
+    width: 70%;
+    margin-top: 32px;
+    text-align: right;
+}
+
+.publicationSection p {
+    text-align: right;
+}
+
+.publicationSection div {
+    justify-content: end;
+}
+
+.blogSection {
+    margin-top: 32px;
+    width: 70%;
+}
+
+.blogSection a, .publicationSection a {
+    color: #92A392;
+}
+
+.blogSection p {
+    margin-top: 16px;
+}
+
+.flex-item {
+    display:flex;
+    align-items: center;
+}
+
+.flex-item img {
+    height: 300px;
+    width: auto;
+    flex-grow:0;
+    flex-shrink:0;
+    margin-left: 16px;
 }
