@@ -7,16 +7,16 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 /**
  * Debug
  */
-const gui = new dat.GUI();
+// const gui = new dat.GUI();
 
 const parameters = {
-  materialColor: "#EFDECD",
+  materialColor: "#A0A795",
 };
 
-gui.addColor(parameters, "materialColor").onChange(() => {
-  material.color.set(parameters.materialColor);
-  particlesMaterial.color.set(parameters.materialColor);
-});
+// gui.addColor(parameters, "materialColor").onChange(() => {
+//   material.color.set(parameters.materialColor);
+//   particlesMaterial.color.set(parameters.materialColor);
+// });
 
 /**
  * Base
@@ -32,7 +32,7 @@ const scene = new THREE.Scene();
  */
 // Texture
 const textureLoader = new THREE.TextureLoader();
-const gradientTexture = textureLoader.load("textures/gradients/3.jpg");
+const gradientTexture = textureLoader.load("textures/gradients/5.jpg");
 gradientTexture.magFilter = THREE.NearestFilter;
 
 // Material
@@ -40,6 +40,9 @@ const material = new THREE.MeshToonMaterial({
   color: parameters.materialColor,
   gradientMap: gradientTexture,
 });
+
+// Objects
+const objectsDistance = 4;
 
 /**
  * Models
@@ -49,63 +52,77 @@ const gltfLoader = new GLTFLoader();
 const brain = await gltfLoader.loadAsync("/models/brain/scene.gltf");
 brain.scene.children[0].scale.set(0.01, 0.01, 0.01);
 brain.scene.traverse((o) => {
-  console.log(o);
   if (o.isMesh) {
-    console.log("Updating material");
     o.material = material;
   }
 });
 const mesh1 = brain.scene;
 
-// Objects
-const objectsDistance = 4;
-// const mesh1 = new THREE.Mesh(
-//     new THREE.TorusGeometry(1, 0.4, 16, 60),
-//     material
-// )
-// const mesh2 = new THREE.Mesh(
-//     new THREE.ConeGeometry(1, 2, 32),
-//     material
-// )
-// const mesh3 = new THREE.Mesh(
-//     new THREE.TorusKnotGeometry(0.8, 0.35, 100, 16),
-//     material
-// )
-
-const book = await gltfLoader.loadAsync("/models/book/scene.gltf");
-book.scene.children[0].scale.set(0.01, 0.01, 0.01);
-book.scene.traverse((o) => {
-  console.log(o);
-  if (o.isMesh && o.name === "Cube_Cover_0") {
-    console.log("Updating material");
-    o.material = material;
-  }
-});
-const mesh2 = book.scene;
-
 const pen = await gltfLoader.loadAsync("/models/simple_pen/scene.gltf");
-pen.scene.children[0].scale.set(0.2, 0.2, 0.2);
+pen.scene.children[0].scale.set(0.15, 0.15, 0.15);
 pen.scene.traverse((o) => {
-  console.log(o);
   if (o.isMesh) {
-    console.log("Updating material");
     o.material = material;
   }
 });
-const mesh3 = pen.scene;
-mesh3.rotateX((1 / 12) * Math.PI);
+const mesh2 = pen.scene;
+mesh2.rotateZ(-(1 / 12) * Math.PI);
 
-mesh1.position.x = 2;
-mesh2.position.x = -1.5;
-mesh3.position.x = 2;
+const lightBulb = await gltfLoader.loadAsync("/models/lightBulb/scene.gltf");
+lightBulb.scene.children[0].scale.set(10, 10, 10);
+lightBulb.scene.traverse((o) => {
+  if (o.isMesh) {
+    o.material = material;
+  }
+});
+const mesh3 = lightBulb.scene;
+mesh3.rotateX((1 / 12) * Math.PI);
+mesh3.rotateZ((1 / 12) * Math.PI);
+
+const keyboard = await gltfLoader.loadAsync("/models/keyboard/scene.gltf");
+keyboard.scene.children[0].scale.set(6, 6, 6);
+// keyboard.scene.traverse((o) => {
+//   if (o.isMesh) {
+//     o.material.gradientMap = gradientTexture;
+//   }
+
+//   if (o.isMesh && o.name === "Object_40") {
+//     // if (o.isMesh) {
+//     console.log(o);
+//     console.log("Updating material");
+//     o.material.gradientMap = gradientTexture;
+//   }
+// });
+const mesh4 = keyboard.scene;
+mesh4.rotateX((2 / 12) * Math.PI);
+
+// const coffee = await gltfLoader.loadAsync(
+//   "/models/low_poly_coffee_cup/scene.gltf"
+// );
+// coffee.scene.children[0].scale.set(0.5, 0.5, 0.5);
+// coffee.scene.traverse((o) => {
+//   if (!o.isMesh || o.name != "Cylinder_1") {
+//     o.material = material;
+//   }
+// });
+// const mesh5 = coffee.scene;
+// mesh5.rotateX((1 / 12) * Math.PI);
+
+mesh1.position.x = 1.75;
+mesh2.position.x = -1.25;
+mesh3.position.x = 1.75;
+mesh4.position.x = -1.25;
+// mesh5.position.x = 2;
 
 mesh1.position.y = -objectsDistance * 0;
 mesh2.position.y = -objectsDistance * 0.9;
-mesh3.position.y = -objectsDistance * 2.5;
+mesh3.position.y = -objectsDistance * 2.1;
+mesh4.position.y = -objectsDistance * 3.1;
+// mesh5.position.y = -objectsDistance * 4.1;
 
-scene.add(mesh1, mesh2, mesh3);
+scene.add(mesh1, mesh2, mesh3, mesh4);
 
-const sectionMeshes = [mesh1, mesh2, mesh3];
+const sectionMeshes = [mesh1, mesh2, mesh3, mesh4];
 
 const axesHelper = new THREE.AxesHelper(5);
 // scene.add( axesHelper );
@@ -213,18 +230,16 @@ function getScrollPercent() {
 }
 
 const topScroll = 65;
-const bottomScroll = 232;
+const bottomScroll = 448;
 const updateScroller = () => {
   const perc = getScrollPercent();
-  console.log(perc);
-
   const scroller = document.getElementById("dot");
-  console.log(scroller);
+
   if (perc === 0) {
     scroller.style.top = topScroll + "px";
   } else {
     scroller.style.top =
-      (bottomScroll - topScroll) * (perc / 100) + topScroll + "px";
+      (bottomScroll - topScroll) * (perc / 100) + topScroll - 10 + "px";
   }
 };
 
@@ -236,21 +251,21 @@ window.addEventListener("scroll", () => {
   if (newSection != currentSection) {
     currentSection = newSection;
 
-    if (currentSection === 0 || currentSection === 1 || currentSection === 2) {
-      gsap.to(sectionMeshes[currentSection].rotation, {
-        duration: 1.5,
-        ease: "power2.inOut",
-        y: "+=4",
-      });
-    } else {
-      gsap.to(sectionMeshes[currentSection].rotation, {
-        duration: 1.5,
-        ease: "power2.inOut",
-        x: "+=6",
-        y: "+=3",
-        z: "+=1.5",
-      });
-    }
+    // if (currentSection === 0 || currentSection === 1 || currentSection === 2) {
+    gsap.to(sectionMeshes[currentSection].rotation, {
+      duration: 1.5,
+      ease: "power2.inOut",
+      y: "+=4",
+    });
+    // } else {
+    //   gsap.to(sectionMeshes[currentSection].rotation, {
+    //     duration: 1.5,
+    //     ease: "power2.inOut",
+    //     x: "+=6",
+    //     y: "+=3",
+    //     z: "+=1.5",
+    //   });
+    // }
   }
 });
 
@@ -289,12 +304,12 @@ const tick = () => {
 
   // Animate meshes
   sectionMeshes.forEach((mesh, i) => {
-    if (i === 0 || i === 2) {
-      mesh.rotation.y += deltaTime * 0.2;
-    } else {
-      mesh.rotation.x += deltaTime * 0.1;
-      mesh.rotation.y += deltaTime * 0.12;
-    }
+    // if (i !== 2) {
+    mesh.rotation.y += deltaTime * 0.2;
+    // } else {
+    //   mesh.rotation.x += deltaTime * 0.1;
+    //   mesh.rotation.y += deltaTime * 0.12;
+    // }
   });
 
   // Render

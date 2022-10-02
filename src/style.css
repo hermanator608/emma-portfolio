@@ -4,9 +4,17 @@
     padding: 0;
 }
 
+body {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+}
+body::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
+}
+
 html
 {
-    background: #FDFCF5;
+    background: #DBD6CE;
 }
 
 .webgl
@@ -27,11 +35,22 @@ html
     /* transform: translateX(-50%); */
     margin-left: 0.5px;
     height: 100%;
-    border-right: 2px solid rgba(0,0,0,.05);
+    border-right: 2px solid rgba(164,159,152,.30);
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     padding-right: 8px;
     z-index: 10;
+}
+
+.navigator-link-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.navigator-external-link-container {
+    display: flex;
+    justify-content: space-evenly;
 }
 
 .caption {
@@ -49,7 +68,7 @@ html
     left: 141px;
     height: 16px;
     width: 16px;
-    background-color: #C1C0AB;
+    background-color: #a0a795;
     border-radius: 50%;
     display: inline-block;
 }
@@ -60,18 +79,17 @@ html
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* align-items: center; */
     height: 100vh;
     position: relative;
     color: #3E4040;
-    font-size: 6vmin;
+    font-size: 4vmin;
     padding-left: 10%;
     padding-right: 10%;
 }
 
-.section:nth-of-type(2), .section:nth-of-type(3) {
+/* .section:nth-of-type(5) {
     height: 150vh;
-}
+} */
 
 
 .section p, li {
@@ -88,17 +106,15 @@ section:nth-child(even)
 
 .navigator a {
     text-decoration: none; /* no underline */
-    color: #92A392;
+    color: #3E4040;
 }
 
 .publicationSection {
-    width: 70%;
-    margin-top: 32px;
-    text-align: right;
-}
-
-.publicationSection p {
-    text-align: right;
+    width: 90%;
+    margin-top: 8px;
+    display:flex;
+    align-items: flex-end;
+    flex-direction: column;
 }
 
 .publicationSection div {
@@ -107,20 +123,31 @@ section:nth-child(even)
 
 .blogSection {
     margin-top: 32px;
-    width: 70%;
-}
-
-.blogSection a, .publicationSection a {
-    color: #92A392;
 }
 
 .blogSection p {
+    width: 100%;
+}
+
+.blogSection a, .publicationSection a, h6 {
+    color: #A49F98;
+}
+
+p {
     margin-top: 16px;
+}
+
+.ongoingProjectsSection {
+    margin-top: 32px;
+}
+
+.flex-item-column {
+    display:flex;
+    flex-direction: column;
 }
 
 .flex-item {
     display:flex;
-    align-items: center;
 }
 
 .flex-item img {

@@ -1,0 +1,11 @@
+Model Information:
+* title:	Coffee Mug with Plate
+* source:	https://sketchfab.com/3d-models/coffee-mug-with-plate-3f6b7b02847e49d0892426b5d0abf317
+* author:	AlexeyMak (https://sketchfab.com/AlexMak)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Coffee Mug with Plate" (https://sketchfab.com/3d-models/coffee-mug-with-plate-3f6b7b02847e49d0892426b5d0abf317) by AlexeyMak (https://sketchfab.com/AlexMak) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
