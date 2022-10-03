@@ -111,13 +111,13 @@ mesh4.rotateX((2 / 12) * Math.PI);
 mesh1.position.x = 1.75;
 mesh2.position.x = -1.25;
 mesh3.position.x = 1.75;
-mesh4.position.x = -1.25;
+mesh4.position.x = 0;
 // mesh5.position.x = 2;
 
 mesh1.position.y = -objectsDistance * 0;
 mesh2.position.y = -objectsDistance * 0.9;
 mesh3.position.y = -objectsDistance * 2.1;
-mesh4.position.y = -objectsDistance * 3.1;
+mesh4.position.y = -objectsDistance * 3.2;
 // mesh5.position.y = -objectsDistance * 4.1;
 
 scene.add(mesh1, mesh2, mesh3, mesh4);
@@ -218,11 +218,11 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 /**
  * Scroll
  */
-let scrollY = window.scrollY;
+let scrollY = document.getElementById("mainContainer").scrollTop;
 let currentSection = 0;
 
 function getScrollPercent() {
-  var h = document.documentElement,
+  var h = document.getElementById("mainContainer"),
     b = document.body,
     st = "scrollTop",
     sh = "scrollHeight";
@@ -243,9 +243,10 @@ const updateScroller = () => {
   }
 };
 
-window.addEventListener("scroll", () => {
+document.getElementById("mainContainer").addEventListener("scroll", () => {
   updateScroller();
-  scrollY = window.scrollY;
+  scrollY = document.getElementById("mainContainer").scrollTop;
+
   const newSection = Math.round(scrollY / sizes.height);
 
   if (newSection != currentSection) {
@@ -280,6 +281,27 @@ window.addEventListener("mousemove", (event) => {
   cursor.x = event.clientX / sizes.width - 0.5;
   cursor.y = event.clientY / sizes.height - 0.5;
 });
+
+const mediaQuery = "(max-width: 1000px)";
+const mediaQueryList = window.matchMedia(mediaQuery);
+
+const handleChange = (event) => {
+  console.log(window.innerWidth);
+  if (event.matches) {
+    console.log("The window is now 1000px or under");
+    mesh1.position.x = 0.5;
+    mesh1.position.y = -objectsDistance * -0.3;
+    brain.scene.children[0].scale.set(0.005, 0.005, 0.005);
+  } else {
+    console.log("The window is now over 1000px");
+    mesh1.position.x = 1.75;
+    mesh1.position.y = -objectsDistance * -0;
+    brain.scene.children[0].scale.set(0.01, 0.01, 0.01);
+  }
+};
+
+mediaQueryList.addEventListener("change", handleChange);
+handleChange(mediaQueryList);
 
 /**
  * Animate
