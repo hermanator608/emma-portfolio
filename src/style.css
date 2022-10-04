@@ -6,6 +6,10 @@
     scrollbar-width: none;  /* Firefox */
 }
 
+/* * {
+    outline: 1px solid red;
+} */
+
 *::-webkit-scrollbar {
     display: none;  /* Safari and Chrome */
 }
@@ -49,7 +53,6 @@ html
 
     #grid {
         display: grid;
-        /* grid-template-rows: 55px calc(100vh - 55px); */
         grid-template-columns: 140px auto;
         grid-template-areas:
           'nav main';
@@ -63,8 +66,6 @@ html
     font-family: ShipleyRegular;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    height: 100vh;
     position: relative;
     color: #3E4040;
     font-size: 2rem;
@@ -77,23 +78,14 @@ html
     width: 100%;
 }
 
-.section:nth-child(n) {
-    height: 150vh;
-}
 
 .section:nth-child(1) {
-    height: 100vh;
+    justify-content: center;
 }
 
-.section:nth-child(even)
-{
-    align-items: flex-start;
-}
-
-@media (min-width: 500px) {
+@media (min-width: 700px) {
     .section {
         font-size: 4rem;
-        height: 100vh;
         padding-left: 10%;
         padding-right: 10%;
     }
@@ -101,14 +93,6 @@ html
     .section p, li {
         font-size: 1.5rem;
         width: 70%;
-    }
-
-    .section:nth-child(even) {
-        align-items: flex-end;
-    }
-
-    .section:nth-child(n) {
-        height: 100vh;
     }
 }
 
@@ -144,7 +128,22 @@ html
 
 #mainContainer {
     grid-area: main;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: repeat(1fr);
+    grid-row-gap: 20rem;
+    margin-top: 35vh;
+    margin-bottom: 2rem;
     overflow-y: scroll;
+}
+
+@media (min-width: 700px) {
+    #mainContainer {
+        grid-template-rows: repeat(5, 100vh);
+        margin-top: 0;
+        margin-bottom: 0;
+        grid-row-gap: 0;
+    }
 }
 
 ol {list-style-position: inside;}
@@ -158,12 +157,7 @@ ol {list-style-position: inside;}
     width: 90%;
     margin-top: 8px;
     display:flex;
-    align-items: flex-end;
     flex-direction: column;
-}
-
-.publicationSection div {
-    justify-content: end;
 }
 
 .blogSection {
@@ -198,13 +192,13 @@ p {
 }
 
 .blogGrid img {
-    height: 100%;
-    width: 100%;
+    height: auto;
+    width: 100px;
     padding-top: 8px;
     display: none;
 }
 
-@media (min-width: 500px) {
+@media (min-width: 700px) {
     .blogGrid img {
         display: block;
     }

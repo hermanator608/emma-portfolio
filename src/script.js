@@ -50,7 +50,7 @@ const objectsDistance = 4;
 const gltfLoader = new GLTFLoader();
 
 const brain = await gltfLoader.loadAsync("/models/brain/scene.gltf");
-brain.scene.children[0].scale.set(0.01, 0.01, 0.01);
+brain.scene.children[0].scale.set(0.007, 0.007, 0.007);
 brain.scene.traverse((o) => {
   if (o.isMesh) {
     o.material = material;
@@ -109,15 +109,15 @@ mesh4.rotateX((2 / 12) * Math.PI);
 // mesh5.rotateX((1 / 12) * Math.PI);
 
 mesh1.position.x = 2;
-mesh2.position.x = -1.25;
-mesh3.position.x = 1.75;
-mesh4.position.x = 0;
+mesh2.position.x = 2;
+mesh3.position.x = 2;
+mesh4.position.x = 2;
 // mesh5.position.x = 2;
 
 mesh1.position.y = -objectsDistance * 0;
-mesh2.position.y = -objectsDistance * 0.9;
-mesh3.position.y = -objectsDistance * 2.1;
-mesh4.position.y = -objectsDistance * 3.2;
+mesh2.position.y = -objectsDistance * 0.8;
+mesh3.position.y = -objectsDistance * 1.9;
+mesh4.position.y = -objectsDistance * 2.75;
 // mesh5.position.y = -objectsDistance * 4.1;
 
 scene.add(mesh1, mesh2, mesh3, mesh4);
@@ -230,7 +230,7 @@ function getScrollPercent() {
 }
 
 const topScroll = 65;
-const bottomScroll = 448;
+const bottomScroll = 440;
 const updateScroller = () => {
   const perc = getScrollPercent();
   const scroller = document.getElementById("dot");
@@ -239,7 +239,7 @@ const updateScroller = () => {
     scroller.style.top = topScroll + "px";
   } else {
     scroller.style.top =
-      (bottomScroll - topScroll) * (perc / 100) + topScroll - 10 + "px";
+      (bottomScroll - topScroll) * (perc / 100) + topScroll - 5 + "px";
   }
 };
 
@@ -296,7 +296,7 @@ const handleChange = (event) => {
     console.log("The window is now over 1000px");
     mesh1.position.x = 2;
     mesh1.position.y = -objectsDistance * -0;
-    brain.scene.children[0].scale.set(0.01, 0.01, 0.01);
+    brain.scene.children[0].scale.set(0.007, 0.007, 0.007);
   }
 };
 
