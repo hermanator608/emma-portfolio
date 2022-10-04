@@ -67,7 +67,7 @@ html
     height: 100vh;
     position: relative;
     color: #3E4040;
-    font-size: 8vmin;
+    font-size: 2rem;
     padding-left: 5%;
     padding-right: 5%;
 }
@@ -92,14 +92,14 @@ html
 
 @media (min-width: 500px) {
     .section {
-        font-size: 4vmin;
+        font-size: 4rem;
         height: 100vh;
         padding-left: 10%;
         padding-right: 10%;
     }
 
     .section p, li {
-        font-size: 2vmin;
+        font-size: 1.5rem;
         width: 70%;
     }
 
@@ -124,11 +124,11 @@ html
 
 .caption {
     padding-left: 8px;
-    margin-top: 5vh;
+    margin-top: 64px;
     opacity: .5;
     text-align: right;
     margin-left: 0.1em;
-    transition: opacity .625s;
+    /* transition: opacity .625s; */
 }
 
 #dot {
@@ -191,21 +191,21 @@ p {
     flex-direction: column;
 }
 
-.flex-item {
-    display:flex;
+.blogGrid {
+    display: grid;
+    grid-template-columns: 92% 8%;
+    grid-gap: 10px;
 }
 
-.flex-item img {
-    height: 300px;
-    width: auto;
-    flex-grow:0;
-    flex-shrink:0;
-    margin-left: 16px;
+.blogGrid img {
+    height: 100%;
+    width: 100%;
+    padding-top: 8px;
     display: none;
 }
 
 @media (min-width: 500px) {
-    .flex-item img {
+    .blogGrid img {
         display: block;
     }
 }

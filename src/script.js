@@ -108,7 +108,7 @@ mesh4.rotateX((2 / 12) * Math.PI);
 // const mesh5 = coffee.scene;
 // mesh5.rotateX((1 / 12) * Math.PI);
 
-mesh1.position.x = 1.75;
+mesh1.position.x = 2;
 mesh2.position.x = -1.25;
 mesh3.position.x = 1.75;
 mesh4.position.x = 0;
@@ -294,7 +294,7 @@ const handleChange = (event) => {
     brain.scene.children[0].scale.set(0.005, 0.005, 0.005);
   } else {
     console.log("The window is now over 1000px");
-    mesh1.position.x = 1.75;
+    mesh1.position.x = 2;
     mesh1.position.y = -objectsDistance * -0;
     brain.scene.children[0].scale.set(0.01, 0.01, 0.01);
   }
