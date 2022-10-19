@@ -115,9 +115,9 @@ mesh4.position.x = 2;
 // mesh5.position.x = 2;
 
 mesh1.position.y = -objectsDistance * 0;
-mesh2.position.y = -objectsDistance * 0.8;
+mesh2.position.y = -objectsDistance * 0.9;
 mesh3.position.y = -objectsDistance * 1.9;
-mesh4.position.y = -objectsDistance * 2.75;
+mesh4.position.y = -objectsDistance * 2.85;
 // mesh5.position.y = -objectsDistance * 4.1;
 
 scene.add(mesh1, mesh2, mesh3, mesh4);

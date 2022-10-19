@@ -130,8 +130,8 @@ html
     grid-area: main;
     display: grid;
     grid-template-columns: auto;
-    grid-template-rows: repeat(1fr);
-    grid-row-gap: 20rem;
+    grid-template-rows: 100vh repeat(4, 1fr);
+    row-gap: 10rem;
     margin-top: 35vh;
     margin-bottom: 2rem;
     overflow-y: scroll;
@@ -139,10 +139,10 @@ html
 
 @media (min-width: 700px) {
     #mainContainer {
-        grid-template-rows: repeat(5, 100vh);
+        /* grid-template-rows: repeat(5, 100vh); */
         margin-top: 0;
         margin-bottom: 0;
-        grid-row-gap: 0;
+        /* grid-row-gap: 0; */
     }
 }
 
@@ -162,6 +162,7 @@ ol {list-style-position: inside;}
 
 .blogSection {
     margin-top: 32px;
+    margin-bottom: 32px;
 }
 
 .blogSection p {
