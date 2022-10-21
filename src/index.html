@@ -1,128 +1,267 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Emma Herms</title>
     <script src="https://use.fontawesome.com/fd29a45ab3.js"></script>
     <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-analytics.js";
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-analytics.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
 
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-        const firebaseConfig = {
-          apiKey: "AIzaSyCPpFakntwzZC3CjyMk8RrFVJQtjkoRBA8",
-          authDomain: "emma-profile-64a24.firebaseapp.com",
-          projectId: "emma-profile-64a24",
-          storageBucket: "emma-profile-64a24.appspot.com",
-          messagingSenderId: "539581672283",
-          appId: "1:539581672283:web:d4acf02e922b782bde887e",
-          measurementId: "G-S1D1MV5NR5"
-        };
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      const firebaseConfig = {
+        apiKey: "AIzaSyCPpFakntwzZC3CjyMk8RrFVJQtjkoRBA8",
+        authDomain: "emma-profile-64a24.firebaseapp.com",
+        projectId: "emma-profile-64a24",
+        storageBucket: "emma-profile-64a24.appspot.com",
+        messagingSenderId: "539581672283",
+        appId: "1:539581672283:web:d4acf02e922b782bde887e",
+        measurementId: "G-S1D1MV5NR5",
+      };
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-      </script>
-</head>
-<body>
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+    </script>
+  </head>
+  <body>
     <canvas class="webgl"></canvas>
 
     <div id="grid">
-        <div class="navigator">
-            <span id="dot"></span>
-            <div class="navigator-link-container">
-                <span class="caption"><a href="#emmaherms">Emma Herms</a></span>
-                <span class="caption"><a href="#publications">Publications</a></span>
-                <span class="caption"><a href="#ongoingProjects">Ongoing Projects</a></span>
-                <span class="caption"><a href="#professionalDevelopment">Professional Development</a></span>
-                <span class="caption"><a href="#scienceCommunication">Science Comm.</a></span>
-            </div>
-            <div class="navigator-external-link-container">
-                <a href="https://github.com/mkdir-eherms" target="_blank"><i class="fa fa-github fa-3x" aria-hidden="true"></i></a>
-                <a href="https://www.linkedin.com/in/emma-herms" target="_blank"><i class="fa fa-linkedin-square fa-3x" aria-hidden="true"></i></a>
-            </div>
+      <div class="navigator">
+        <span id="dot"></span>
+        <div class="navigator-link-container">
+          <span class="caption"><a href="#emmaherms">Emma Herms</a></span>
+          <span class="caption"><a href="#publications">Publications</a></span>
+          <span class="caption"
+            ><a href="#ongoingProjects">Ongoing Projects</a></span
+          >
+          <span class="caption"
+            ><a href="#professionalDevelopment"
+              >Professional Development</a
+            ></span
+          >
+          <span class="caption"
+            ><a href="#scienceCommunication">Science Comm.</a></span
+          >
         </div>
+        <div class="navigator-external-link-container">
+          <a href="https://github.com/mkdir-eherms" target="_blank"
+            ><i class="fa fa-github fa-3x" aria-hidden="true"></i
+          ></a>
+          <a href="https://www.linkedin.com/in/emma-herms" target="_blank"
+            ><i class="fa fa-linkedin-square fa-3x" aria-hidden="true"></i
+          ></a>
+        </div>
+      </div>
 
-        <div id="mainContainer">
-            <section id="emmaherms" class="section">
-                <h1 >Hi, I'm Emma Herms</h1>
+      <div id="mainContainer">
+        <section id="emmaherms" class="section">
+          <h1>Hi, I'm Emma Herms</h1>
+          <p>
+            a third year Ph.D. student in Clinical and Cognitive Science at
+            Indiana University. My work uses computational and neuroimaging
+            methods to study interoception (i.e., the physiological state of the
+            body) and affective processes (e.g., emotion regulation,
+            interpersonal relationships, decision-making) in both community and
+            clinical populations.
+          </p>
+        </section>
+        <div id="sectionsContainer">
+          <section id="publications" class="section publications">
+            <h2>Publications</h2>
+            <div class="publicationSection">
+              <p>
+                <b>Herms, E.</b>, Bolbecker, A. R., & Wisner, K. M. (2022).
+                <a
+                  href="https://www.frontiersin.org/articles/10.3389/fpsyt.2022.992757/full"
+                  target="_blank"
+                  >Emotion Regulation and Delusion-proneness Relate to
+                  Empathetic Tendencies in a Transdiagnostic Sample.</a
+                >
+                Frontiers in Psychiatry, 2213.
+              </p>
+            </div>
+            <div class="publicationSection">
+              <p>
+                Purcell, J. R., <b>Herms, E. N.</b>, Morales, J., Hetrick, W.
+                P., Wisner, K. M., & Brown, J. W. (2022).
+                <a
+                  href="https://www.sciencedirect.com/science/article/abs/pii/S0272735821001550"
+                  target="_blank"
+                  >A review of risky decision-making in psychosis-spectrum
+                  disorders.</a
+                >
+                Clinical psychology review, 91, 102112.
+              </p>
+            </div>
+            <div class="publicationSection">
+              <p>
+                <b>Herms, E. N.</b>, Bishop, J. R., Okuneye, V. T., Tamminga, C.
+                A., Keshavan, M. S., Pearlson, G. D., ... & Keedy, S. K. (2020).
+                <a
+                  href="https://www.sciencedirect.com/science/article/abs/pii/S0920996420303698"
+                  target="_blank"
+                  >No connectivity alterations for striatum, default mode, or
+                  salience network in association with self-reported
+                  antipsychotic medication dose in a large chronic patient
+                  group.</a
+                >
+                Schizophrenia research, 223, 359-360.
+              </p>
+            </div>
+          </section>
+          <section id="ongoingProjects" class="section">
+            <h2>Ongoing Projects</h2>
+            <div>
+              <div class="ongoingProjectsSection flex-item-column">
+                <h6>Hierarchical Bayesian Models of Risk-Taking</h6>
                 <p>
-                    a third year Ph.D. student in Clinical and Cognitive Science at Indiana University.
-                    My work uses computational and neuroimaging methods to study interoception (i.e., the physiological state of the body) and affective processes (e.g., emotion regulation, interpersonal relationships, decision-making) in both community and clinical populations.
+                  Using the Balloon Analogue Risk Task (BART) to assess
+                  individual differences in risk-taking behavior. In this task,
+                  participants pump a virtual balloon to earn rewards. The more
+                  pumps, the higher the reward, but the greater probability the
+                  balloon will burst. If the balloon bursts participants receive
+                  no reward. Similar to risk-taking in real life, the
+                  probability of the balloon bursting is unknown.
                 </p>
-            </section>
-            <section id="publications" class="section publications">
-                <h2>Publications</h2>
-                <div class="publicationSection">
-                    <p><b>Herms, E.</b>, Bolbecker, A. R., & Wisner, K. M. (2022). <a href="https://www.frontiersin.org/articles/10.3389/fpsyt.2022.992757/full" target="_blank">Emotion Regulation and Delusion-proneness Relate to Empathetic Tendencies in a Transdiagnostic Sample.</a> Frontiers in Psychiatry, 2213.</p>
-                </div>
-                <div class="publicationSection">
-                    <p>Purcell, J. R., <b>Herms, E. N.</b>, Morales, J., Hetrick, W. P., Wisner, K. M., & Brown, J. W. (2022). <a href="https://www.sciencedirect.com/science/article/abs/pii/S0272735821001550" target="_blank">A review of risky decision-making in psychosis-spectrum disorders.</a> Clinical psychology review, 91, 102112.</p>
-                </div>
-                <div class="publicationSection">
-                    <p><b>Herms, E. N.</b>, Bishop, J. R., Okuneye, V. T., Tamminga, C. A., Keshavan, M. S., Pearlson, G. D., ... & Keedy, S. K. (2020). <a href="https://www.sciencedirect.com/science/article/abs/pii/S0920996420303698" target="_blank">No connectivity alterations for striatum, default mode, or salience network in association with self-reported antipsychotic medication dose in a large chronic patient group.</a> Schizophrenia research, 223, 359-360.</p>
-                </div>
-            </section>
-            <section id="ongoingProjects" class="section">
-                <h2>Ongoing Projects</h2>
-                <div>
-                    <div class="ongoingProjectsSection flex-item-column">
-                        <h6>Hierarchical Bayesian Models of Risk-Taking</h6>
-                        <p>
-                            Using the Balloon Analogue Risk Task (BART) to assess individual differences in risk-taking behavior. In this task, participants pump a virtual balloon to earn rewards. The more pumps, the higher the reward, but the greater probability the balloon will burst. If the balloon bursts participants receive no reward. Similar to risk-taking in real life, the probability of the balloon bursting is unknown.
-                        </p>
-                        <p>
-                            We are applying hierarchical Bayesian modeling to study behavioral BART performance via the Expectancy Valence model (Busemeyer and Stout, 2002; Wallsten et al., 2005). Specifically, we model risk tolerance (𝛾), the prior belief of balloon not bursting (𝜙), updating rate (𝜂), and inverse temperature (𝜏).
-                        </p>
-                    </div>
-                    <div class="ongoingProjectsSection flex-item-column">
-                        <h6>Interoceptive Models of Mental Health </h6>
-                        <p>
-                            Developments in computational neuroscience have provided a theoretical (i.e., Free Energy Principle) and quantitative approach (i.e., Bayesian Predictive Coding) thought to better reflect how the brain makes sense of sensory information. Prior beliefs (i.e., models of the world) are combined with sensory input to generate perceptual experience.
-                        </p>
-                        <p>
-                            Research has suggested that unbalanced weighting of prior beliefs and sensory input may be an integral part of mental health problems (e.g., hallucinations may reflect imbalance of prior beliefs about the likelihood of hearing voices compared to incoming auditory input). Previous work has examined mental health problems through the lens of hyper-precise prior beliefs about exteroceptive stimuli (e.g., auditory and visual inputs). However, many interoceptive stimuli (i.e., sensations reflecting the physiological state of one’s body) have not been examined via hierarchical Bayesian models of belief updating. This ongoing project utilizes a novel interoception paradigm to examine how the weighting and updating of prior beliefs regarding interoceptive inputs may vary with mental health symptoms.
-                        </p>
-                    </div>
-                </div>
-            </section>
-            <section id="professionalDevelopment" class="section">
-                <h2>Professional Development</h2>
-                <p>... coming soon</p>
-            </section>
+                <p>
+                  We are applying hierarchical Bayesian modeling to study
+                  behavioral BART performance via the Expectancy Valence model
+                  (Busemeyer and Stout, 2002; Wallsten et al., 2005).
+                  Specifically, we model risk tolerance (𝛾), the prior belief of
+                  balloon not bursting (𝜙), updating rate (𝜂), and inverse
+                  temperature (𝜏).
+                </p>
+              </div>
+              <div class="ongoingProjectsSection flex-item-column">
+                <h6>Interoceptive Models of Mental Health</h6>
+                <p>
+                  Developments in computational neuroscience have provided a
+                  theoretical (i.e., Free Energy Principle) and quantitative
+                  approach (i.e., Bayesian Predictive Coding) thought to better
+                  reflect how the brain makes sense of sensory information.
+                  Prior beliefs (i.e., models of the world) are combined with
+                  sensory input to generate perceptual experience.
+                </p>
+                <p>
+                  Research has suggested that unbalanced weighting of prior
+                  beliefs and sensory input may be an integral part of mental
+                  health problems (e.g., hallucinations may reflect imbalance of
+                  prior beliefs about the likelihood of hearing voices compared
+                  to incoming auditory input). Previous work has examined mental
+                  health problems through the lens of hyper-precise prior
+                  beliefs about exteroceptive stimuli (e.g., auditory and visual
+                  inputs). However, many interoceptive stimuli (i.e., sensations
+                  reflecting the physiological state of one’s body) have not
+                  been examined via hierarchical Bayesian models of belief
+                  updating. This ongoing project utilizes a novel interoception
+                  paradigm to examine how the weighting and updating of prior
+                  beliefs regarding interoceptive inputs may vary with mental
+                  health symptoms.
+                </p>
+              </div>
+            </div>
+          </section>
+          <section id="professionalDevelopment" class="section">
+            <h2>Professional Development</h2>
+            <p>... coming soon</p>
+          </section>
 
-            <section id="scienceCommunication" class="section">
-                <h2>Science Communication</h2>
-                <div class="blogSection">
-                    <h6><a href="https://blogs.iu.edu/sciu/2021/11/20/what-are-delusions" target="_blank">What are delusions?: A look at social processes behind delusional beliefs</a></h6>
-                    <div class="blogGrid">
-                        <p>Researchers and mental health professionals use a common definition to describe delusions: a fixed, false belief held despite contradictory evidence. Not only does this definition fail to distinguish delusions from other widespread beliefs, such as religious or ideological beliefs, but it also attempts to simplify delusions to an individual characteristic of irrationality (i.e., the person has failed to distinguish what is true and false. This conceptualization of delusions has been criticized, and new theories have emerged, which focus on the inherently social nature of acquiring beliefs. This framework might better explain why delusions exist in the general population and identify some ways in which false beliefs can form...</p>
-                        <img src="../public/images/pexels-nadezhda-moryak-9162031.jpg"/>
-                    </div>
-                </div>
-                <div class="blogSection">
-                    <h6><a href="https://blogs.iu.edu/sciu/2021/08/21/putting-it-into-context" target="_blank">Putting it into context: How psychology has shaped our knowledge of universal emotions</a></h6>
-                    <div class="blogGrid">
-                        <p>What are common emotions experienced in your culture? In the United States, happiness, anger, sadness, and fear are considered common emotions. The traditional theory of emotion assumes emotions are universally recognized by all humans. This theory dominates pop culture, with movies like Pixar’s Inside Out, which features characters personifying five emotions that coordinate our every action, and items like Amazon’s Halo Watch, which claims to detect emotions based on tone of voice. Yet, it is not possible to determine what emotion someone is experiencing based only on their face or tone of voice. Instead, our brain makes a prediction that is influenced by past experience, the current context, and interoceptive signals from our body (e.g., heart and breathing rate, hunger cues) from a culture-specific perspective...</p>
-                        <img src="../public/images/pexels-roman-odintsov-6898861-2.jpg"/>
-                    </div>
-                </div>
-                <div class="blogSection">
-                    <h6><a href="https://www.pcsasnews.org/culture_context_shapes_emotions" target="_blank">How Culture and Context Shape Our Understanding of Emotions</a></h6>
-                    <div class="blogGrid">
-                        <p>Traditionally, emotions were thought of as universal. What would it mean for an emotion to be universal? A universal emotion would be associated with a single facial expression or unique physiological response and be consistent across cultures. Researchers have explored potential universal facial expressions for emotions...</p>
-                    </div>
-                </div>
-            </section>
+          <section id="scienceCommunication" class="section">
+            <h2>Science Communication</h2>
+            <div class="blogSection">
+              <h6>
+                <a
+                  href="https://blogs.iu.edu/sciu/2021/11/20/what-are-delusions"
+                  target="_blank"
+                  >What are delusions?: A look at social processes behind
+                  delusional beliefs</a
+                >
+              </h6>
+              <div class="blogGrid">
+                <p>
+                  Researchers and mental health professionals use a common
+                  definition to describe delusions: a fixed, false belief held
+                  despite contradictory evidence. Not only does this definition
+                  fail to distinguish delusions from other widespread beliefs,
+                  such as religious or ideological beliefs, but it also attempts
+                  to simplify delusions to an individual characteristic of
+                  irrationality (i.e., the person has failed to distinguish what
+                  is true and false. This conceptualization of delusions has
+                  been criticized, and new theories have emerged, which focus on
+                  the inherently social nature of acquiring beliefs. This
+                  framework might better explain why delusions exist in the
+                  general population and identify some ways in which false
+                  beliefs can form...
+                </p>
+                <img
+                  src="../public/images/pexels-nadezhda-moryak-9162031.jpg"
+                />
+              </div>
+            </div>
+            <div class="blogSection">
+              <h6>
+                <a
+                  href="https://blogs.iu.edu/sciu/2021/08/21/putting-it-into-context"
+                  target="_blank"
+                  >Putting it into context: How psychology has shaped our
+                  knowledge of universal emotions</a
+                >
+              </h6>
+              <div class="blogGrid">
+                <p>
+                  What are common emotions experienced in your culture? In the
+                  United States, happiness, anger, sadness, and fear are
+                  considered common emotions. The traditional theory of emotion
+                  assumes emotions are universally recognized by all humans.
+                  This theory dominates pop culture, with movies like Pixar’s
+                  Inside Out, which features characters personifying five
+                  emotions that coordinate our every action, and items like
+                  Amazon’s Halo Watch, which claims to detect emotions based on
+                  tone of voice. Yet, it is not possible to determine what
+                  emotion someone is experiencing based only on their face or
+                  tone of voice. Instead, our brain makes a prediction that is
+                  influenced by past experience, the current context, and
+                  interoceptive signals from our body (e.g., heart and breathing
+                  rate, hunger cues) from a culture-specific perspective...
+                </p>
+                <img
+                  src="../public/images/pexels-roman-odintsov-6898861-2.jpg"
+                />
+              </div>
+            </div>
+            <div class="blogSection">
+              <h6>
+                <a
+                  href="https://www.pcsasnews.org/culture_context_shapes_emotions"
+                  target="_blank"
+                  >How Culture and Context Shape Our Understanding of
+                  Emotions</a
+                >
+              </h6>
+              <div class="blogGrid">
+                <p>
+                  Traditionally, emotions were thought of as universal. What
+                  would it mean for an emotion to be universal? A universal
+                  emotion would be associated with a single facial expression or
+                  unique physiological response and be consistent across
+                  cultures. Researchers have explored potential universal facial
+                  expressions for emotions...
+                </p>
+              </div>
+            </div>
+          </section>
         </div>
+      </div>
     </div>
     <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Aliquam sem et tortor consequat id porta nibh venenatis cras. Consectetur a erat nam at lectus urna. Pretium aenean pharetra magna ac. Non blandit massa enim nec dui nunc. Semper quis lectus nulla at volutpat diam ut venenatis tellus. Sagittis id consectetur purus ut faucibus pulvinar elementum integer. Enim eu turpis egestas pretium aenean. Elementum nisi quis eleifend quam adipiscing vitae proin sagittis nisl. Aliquam sem fringilla ut morbi tincidunt. Tellus orci ac auctor augue mauris. Diam vulputate ut pharetra sit amet aliquam id. Habitant morbi tristique senectus et netus.</p>
     <p>Cras fermentum odio eu feugiat pretium nibh ipsum consequat. Nisi quis eleifend quam adipiscing vitae. Donec et odio pellentesque diam volutpat. Tincidunt augue interdum velit euismod in pellentesque massa. Lacus vestibulum sed arcu non odio euismod lacinia. Ut eu sem integer vitae justo eget magna fermentum. Nibh tellus molestie nunc non blandit massa enim nec dui. Risus in hendrerit gravida rutrum quisque non tellus. In ante metus dictum at tempor commodo. Pretium fusce id velit ut tortor pretium viverra. Ut sem nulla pharetra diam sit amet nisl suscipit adipiscing.</p>
     <p>Purus ut faucibus pulvinar elementum. Mattis enim ut tellus elementum sagittis vitae et leo. Odio facilisis mauris sit amet massa. Et sollicitudin ac orci phasellus. Elit duis tristique sollicitudin nibh sit amet commodo. Imperdiet massa tincidunt nunc pulvinar sapien et ligula ullamcorper. Mauris ultrices eros in cursus turpis massa. Id diam maecenas ultricies mi. Sem nulla pharetra diam sit amet nisl suscipit adipiscing. Quam viverra orci sagittis eu volutpat odio facilisis. Dictum sit amet justo donec enim diam vulputate.</p> -->
-</body>
+  </body>
 </html>
