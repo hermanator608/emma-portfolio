@@ -50,7 +50,7 @@ const objectsDistance = 4;
 const gltfLoader = new GLTFLoader();
 
 const brain = await gltfLoader.loadAsync("/models/brain/scene.gltf");
-brain.scene.children[0].scale.set(0.007, 0.007, 0.007);
+brain.scene.children[0].scale.set(0.004, 0.004, 0.004);
 brain.scene.traverse((o) => {
   if (o.isMesh) {
     o.material = material;
@@ -58,74 +58,61 @@ brain.scene.traverse((o) => {
 });
 const mesh1 = brain.scene;
 
-const pen = await gltfLoader.loadAsync("/models/simple_pen/scene.gltf");
-pen.scene.children[0].scale.set(0.15, 0.15, 0.15);
-pen.scene.traverse((o) => {
-  if (o.isMesh) {
-    o.material = material;
-  }
-});
-const mesh2 = pen.scene;
-mesh2.rotateZ(-(1 / 12) * Math.PI);
-
-const lightBulb = await gltfLoader.loadAsync("/models/lightBulb/scene.gltf");
-lightBulb.scene.children[0].scale.set(10, 10, 10);
-lightBulb.scene.traverse((o) => {
-  if (o.isMesh) {
-    o.material = material;
-  }
-});
-const mesh3 = lightBulb.scene;
-mesh3.rotateX((1 / 12) * Math.PI);
-mesh3.rotateZ((1 / 12) * Math.PI);
-
-const keyboard = await gltfLoader.loadAsync("/models/keyboard/scene.gltf");
-keyboard.scene.children[0].scale.set(6, 6, 6);
-// keyboard.scene.traverse((o) => {
+// const pen = await gltfLoader.loadAsync("/models/simple_pen/scene.gltf");
+// pen.scene.children[0].scale.set(0.15, 0.15, 0.15);
+// pen.scene.traverse((o) => {
 //   if (o.isMesh) {
-//     o.material.gradientMap = gradientTexture;
-//   }
-
-//   if (o.isMesh && o.name === "Object_40") {
-//     // if (o.isMesh) {
-//     console.log(o);
-//     console.log("Updating material");
-//     o.material.gradientMap = gradientTexture;
-//   }
-// });
-const mesh4 = keyboard.scene;
-mesh4.rotateX((2 / 12) * Math.PI);
-
-// const coffee = await gltfLoader.loadAsync(
-//   "/models/low_poly_coffee_cup/scene.gltf"
-// );
-// coffee.scene.children[0].scale.set(0.5, 0.5, 0.5);
-// coffee.scene.traverse((o) => {
-//   if (!o.isMesh || o.name != "Cylinder_1") {
 //     o.material = material;
 //   }
 // });
-// const mesh5 = coffee.scene;
-// mesh5.rotateX((1 / 12) * Math.PI);
+// const mesh2 = pen.scene;
+// mesh2.rotateZ(-(1 / 12) * Math.PI);
+
+// const lightBulb = await gltfLoader.loadAsync("/models/lightBulb/scene.gltf");
+// lightBulb.scene.children[0].scale.set(10, 10, 10);
+// lightBulb.scene.traverse((o) => {
+//   if (o.isMesh) {
+//     o.material = material;
+//   }
+// });
+// const mesh3 = lightBulb.scene;
+// mesh3.rotateX((1 / 12) * Math.PI);
+// mesh3.rotateZ((1 / 12) * Math.PI);
+
+// const keyboard = await gltfLoader.loadAsync("/models/keyboard/scene.gltf");
+// keyboard.scene.children[0].scale.set(6, 6, 6);
+// // keyboard.scene.traverse((o) => {
+// //   if (o.isMesh) {
+// //     o.material.gradientMap = gradientTexture;
+// //   }
+
+// //   if (o.isMesh && o.name === "Object_40") {
+// //     // if (o.isMesh) {
+// //     console.log(o);
+// //     console.log("Updating material");
+// //     o.material.gradientMap = gradientTexture;
+// //   }
+// // });
+// const mesh4 = keyboard.scene;
+// mesh4.rotateX((2 / 12) * Math.PI);
 
 mesh1.position.x = 2;
-mesh2.position.x = 2;
-mesh3.position.x = 2;
-mesh4.position.x = 2;
-// mesh5.position.x = 2;
+// mesh2.position.x = 2;
+// mesh3.position.x = 2;
+// mesh4.position.x = 2;
 
 mesh1.position.y = -objectsDistance * 0;
-mesh2.position.y = -objectsDistance * 0.9;
-mesh3.position.y = -objectsDistance * 1.9;
-mesh4.position.y = -objectsDistance * 2.85;
-// mesh5.position.y = -objectsDistance * 4.1;
+// mesh2.position.y = -objectsDistance * 0.9;
+// mesh3.position.y = -objectsDistance * 1.9;
+// mesh4.position.y = -objectsDistance * 2.85;
 
-scene.add(mesh1, mesh2, mesh3, mesh4);
+// scene.add(mesh1, mesh2, mesh3, mesh4);
 
-const sectionMeshes = [mesh1, mesh2, mesh3, mesh4];
+// const sectionMeshes = [mesh1, mesh2, mesh3, mesh4];
 
-const axesHelper = new THREE.AxesHelper(5);
-// scene.add( axesHelper );
+scene.add(mesh1);
+
+const sectionMeshes = [mesh1];
 
 /**
  * Lights
@@ -185,7 +172,7 @@ window.addEventListener("resize", () => {
 
   // Update renderer
   renderer.setSize(sizes.width, sizes.height);
-  // renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 });
 
 /**
@@ -218,14 +205,16 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 /**
  * Scroll
  */
-let scrollY = document.getElementById("mainContainer").scrollTop;
+let scrollY = window.scrollY;
 let currentSection = 0;
 
 function getScrollPercent() {
-  var h = document.getElementById("mainContainer"),
+  var h = document.documentElement,
     b = document.body,
     st = "scrollTop",
     sh = "scrollHeight";
+  console.log(h, b);
+  // console.log(((h[st] || b[st]) / ((h[sh] || b[sh]) - h.clientHeight)) * 100);
   return ((h[st] || b[st]) / ((h[sh] || b[sh]) - h.clientHeight)) * 100;
 }
 
@@ -243,30 +232,33 @@ const updateScroller = () => {
   }
 };
 
-document.getElementById("mainContainer").addEventListener("scroll", () => {
+window.addEventListener("scroll", () => {
+  console.log("Updating");
   updateScroller();
-  scrollY = document.getElementById("mainContainer").scrollTop;
+  scrollY = window.scrollY;
 
   const newSection = Math.round(scrollY / sizes.height);
 
   if (newSection != currentSection) {
     currentSection = newSection;
 
-    // if (currentSection === 0 || currentSection === 1 || currentSection === 2) {
-    gsap.to(sectionMeshes[currentSection].rotation, {
-      duration: 1.5,
-      ease: "power2.inOut",
-      y: "+=4",
-    });
-    // } else {
-    //   gsap.to(sectionMeshes[currentSection].rotation, {
-    //     duration: 1.5,
-    //     ease: "power2.inOut",
-    //     x: "+=6",
-    //     y: "+=3",
-    //     z: "+=1.5",
-    //   });
-    // }
+    if (currentSection === 0) {
+      //} || currentSection === 1 || currentSection === 2) {
+      gsap.to(sectionMeshes[currentSection].rotation, {
+        duration: 1.5,
+        ease: "power2.inOut",
+        y: "+=4",
+      });
+      // } else {
+      //   gsap.to(sectionMeshes[currentSection].rotation, {
+      //     duration: 1.5,
+      //     ease: "power2.inOut",
+      //     x: "+=6",
+      //     y: "+=3",
+      //     z: "+=1.5",
+      //   });
+      // }
+    }
   }
 });
 
@@ -296,7 +288,7 @@ const handleChange = (event) => {
     console.log("The window is now over 1000px");
     mesh1.position.x = 2;
     mesh1.position.y = -objectsDistance * -0;
-    brain.scene.children[0].scale.set(0.007, 0.007, 0.007);
+    brain.scene.children[0].scale.set(0.004, 0.004, 0.004);
   }
 };
 

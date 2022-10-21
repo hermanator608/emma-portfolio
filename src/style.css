@@ -2,16 +2,19 @@
 {
     margin: 0;
     padding: 0;
-    -ms-overflow-style: none;  /* Internet Explorer 10+ */
-    scrollbar-width: none;  /* Firefox */
+    /* Internet Explorer 10+ */
+    -ms-overflow-style: none;
+    /* Firefox */
+    scrollbar-width: none;
 }
 
 /* * {
     outline: 1px solid red;
 } */
 
+/* Safari and Chrome */
 *::-webkit-scrollbar {
-    display: none;  /* Safari and Chrome */
+    display: none;
 }
 
 html
@@ -31,8 +34,11 @@ html
     display: none;
 }
 
-#grid {
-   grid-template-columns: 1fr;
+#mainContainer {
+    margin-left: 0;
+    grid-area: main;
+    margin-bottom: 2rem;
+    /* overflow-y: scroll; */
 }
 
 @media (min-width: 1000px) {
@@ -46,18 +52,17 @@ html
         flex-direction: column;
         justify-content: space-between;
         padding-right: 8px;
-        z-index: 10;
-        grid-area: nav;
-        height: 100vh;
+
+        height: 100%; /* Full-height: remove this if you want "auto" height */
+        position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+        z-index: 1; /* Stay on top */
+        top: 0; /* Stay at the top */
+        left: 0;
+        /* overflow-x: hidden; Disable horizontal scroll */
     }
 
-    #grid {
-        display: grid;
-        grid-template-columns: 140px auto;
-        grid-template-areas:
-          'nav main';
-        overflow: hidden;
-        height: 100vh;
+    #mainContainer {
+        margin-left: 150.5px;
     }
 }
 
@@ -126,12 +131,6 @@ html
     display: inline-block;
 }
 
-#mainContainer {
-    grid-area: main;
-    margin-bottom: 2rem;
-    overflow-y: scroll;
-}
-
 #emmaherms {
     height: 100vh;
 }
@@ -140,15 +139,14 @@ html
     display: grid;
     grid-template-columns: auto;
     /* grid-template-rows: repeat(4, 1fr); */
-    row-gap: 35rem;
+    row-gap: 15rem;
 }
 
 @media (min-width: 700px) {
-    #mainContainer {
-        /* grid-template-rows: repeat(5, 100vh); */
+    #sectionsContainer {
         margin-top: 0;
         margin-bottom: 0;
-        /* grid-row-gap: 0; */
+        row-gap: 35rem;
     }
 }
 
