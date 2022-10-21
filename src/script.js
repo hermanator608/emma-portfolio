@@ -213,8 +213,6 @@ function getScrollPercent() {
     b = document.body,
     st = "scrollTop",
     sh = "scrollHeight";
-  console.log(h, b);
-  // console.log(((h[st] || b[st]) / ((h[sh] || b[sh]) - h.clientHeight)) * 100);
   return ((h[st] || b[st]) / ((h[sh] || b[sh]) - h.clientHeight)) * 100;
 }
 
@@ -233,7 +231,6 @@ const updateScroller = () => {
 };
 
 window.addEventListener("scroll", () => {
-  console.log("Updating");
   updateScroller();
   scrollY = window.scrollY;
 
@@ -278,14 +275,13 @@ const mediaQuery = "(max-width: 1000px)";
 const mediaQueryList = window.matchMedia(mediaQuery);
 
 const handleChange = (event) => {
-  console.log(window.innerWidth);
   if (event.matches) {
-    console.log("The window is now 1000px or under");
+    // console.log("The window is now 1000px or under");
     mesh1.position.x = 0.5;
     mesh1.position.y = -objectsDistance * -0.3;
     brain.scene.children[0].scale.set(0.005, 0.005, 0.005);
   } else {
-    console.log("The window is now over 1000px");
+    // console.log("The window is now over 1000px");
     mesh1.position.x = 2;
     mesh1.position.y = -objectsDistance * -0;
     brain.scene.children[0].scale.set(0.004, 0.004, 0.004);
