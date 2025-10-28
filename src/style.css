@@ -66,8 +66,7 @@ html
     }
 }
 
-.section
-{
+.section {
     font-family: ShipleyRegular;
     display: flex;
     flex-direction: column;
@@ -99,6 +98,10 @@ html
         font-size: 1.5rem;
         width: 70%;
     }
+
+    .section h6 {
+        width: 70%
+    }
 }
 
 .navigator-link-container {
@@ -109,6 +112,16 @@ html
 .navigator-external-link-container {
     display: flex;
     justify-content: space-evenly;
+}
+
+/* GitHub and LinkedIn hover effects */
+.navigator-external-link-container a {
+    transition: color 0.3s ease;
+    color: #3E4040; /* Default color */
+}
+
+.navigator-external-link-container a:hover {
+    color: #A0A795; /* Highlight color on hover */
 }
 
 .caption {
@@ -144,9 +157,9 @@ html
 
 @media (min-width: 700px) {
     #sectionsContainer {
-        margin-top: 0;
+        margin-top: 25rem;
         margin-bottom: 0;
-        row-gap: 35rem;
+        row-gap: 45rem;
     }
 }
 
@@ -169,10 +182,6 @@ ol {list-style-position: inside;}
     margin-bottom: 32px;
 }
 
-.blogSection p {
-    width: 100%;
-}
-
 .blogSection a, .publicationSection a, h6 {
     color: #A49F98;
 }
@@ -188,23 +197,4 @@ p {
 .flex-item-column {
     display:flex;
     flex-direction: column;
-}
-
-.blogGrid {
-    display: grid;
-    grid-template-columns: 92% 8%;
-    grid-gap: 10px;
-}
-
-.blogGrid img {
-    height: auto;
-    width: 100px;
-    padding-top: 8px;
-    display: none;
-}
-
-@media (min-width: 700px) {
-    .blogGrid img {
-        display: block;
-    }
 }
