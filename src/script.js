@@ -120,25 +120,38 @@ keyboard.scene.children[0].scale.set(6, 6, 6);
 const mesh4 = keyboard.scene;
 mesh4.rotateX((2 / 12) * Math.PI);
 
-const brainX = 1;
-mesh1.position.x = brainX;
-const heartX = 0
-mesh0.position.x = heartX;
-mesh2.position.x = 2;
-mesh3.position.x = 2;
-mesh4.position.x = 2;
+/**
+ * Anchored models
+ * Each model is wrapped in a pivot group that is centered on its bounding box
+ * and normalized to a max dimension of 1 world unit. Position and size are
+ * then driven every frame from the DOM section it is anchored to (see tick),
+ * so the 3D scene follows the page layout at any screen size.
+ */
+const makePivot = (model) => {
+  const box = new THREE.Box3().setFromObject(model);
+  const center = box.getCenter(new THREE.Vector3());
+  const size = box.getSize(new THREE.Vector3());
+  model.position.sub(center);
 
-const brainY = 1;
-mesh1.position.y = brainY;
-const heartY = objectsDistance * .25;
-mesh0.position.y = heartY;
-mesh2.position.y = -objectsDistance * 1.25;
-mesh3.position.y = -objectsDistance * 2.7;
-mesh4.position.y = -objectsDistance * 3.5;
+  const pivot = new THREE.Group();
+  pivot.add(model);
+  pivot.userData.unit = 1 / Math.max(size.x, size.y, size.z);
+  return pivot;
+};
 
-scene.add(mesh1, mesh0, mesh2, mesh3, mesh4);
+// anchor: id of the section the model sits beside
+// scale: size relative to the anchor's base size
+// phase: if set, the model orbits around the anchor centre (hero pair)
+const models = [
+  { pivot: makePivot(mesh1), anchor: "emmaherms", scale: 0.6, phase: 0 },
+  { pivot: makePivot(mesh0), anchor: "emmaherms", scale: 0.5, phase: Math.PI },
+  { pivot: makePivot(mesh2), anchor: "publications", scale: 1 },
+  { pivot: makePivot(mesh3), anchor: "ongoingProjects", scale: 1 },
+  { pivot: makePivot(mesh4), anchor: "scienceCommunication", scale: 1.1 },
+];
 
-const sectionMeshes = [mesh1, mesh0, mesh2, mesh3, mesh4];
+const sectionMeshes = models.map((m) => m.pivot);
+scene.add(...sectionMeshes);
 
 /**
  * Lights
@@ -151,15 +164,20 @@ scene.add(directionalLight);
  * Particles
  */
 // Geometry
-const particlesCount = 5000;
+const particlesCount = 12000;
 const positions = new Float32Array(particlesCount * 3);
 
 for (let i = 0; i < particlesCount; i++) {
   positions[i * 3 + 0] = (Math.random() - 0.5) * 30;
-  positions[i * 3 + 1] =
-    objectsDistance * 0.5 -
-    Math.random() * objectsDistance * sectionMeshes.length;
+  // Centered on the (now static) camera; the whole field scrolls in tick()
+  positions[i * 3 + 1] = (Math.random() - 0.5) * objectsDistance * 7;
   positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
+}
+
+// Mostly tiny dots with a few larger, softer ones (cubed random is skewed small)
+const dotSizes = new Float32Array(particlesCount);
+for (let i = 0; i < particlesCount; i++) {
+  dotSizes[i] = 0.015 + Math.pow(Math.random(), 3) * 0.07;
 }
 
 const particlesGeometry = new THREE.BufferGeometry();
@@ -167,16 +185,77 @@ particlesGeometry.setAttribute(
   "position",
   new THREE.BufferAttribute(positions, 3)
 );
+particlesGeometry.setAttribute("aSize", new THREE.BufferAttribute(dotSizes, 1));
 
 // Material
-const particlesMaterial = new THREE.PointsMaterial({
-  color: parameters.materialColor,
-  sizeAttenuation: textureLoader,
-  size: 0.03,
+// World units the field shifts per viewport of scroll. The shift is the same
+// for every dot, so near dots sweep past quickly and far dots barely move,
+// which is what gives the field its depth.
+const PARTICLE_SCROLL = 2.0;
+// Idle drift: sway speed (radians/s) and distance (world units)
+const DRIFT_SPEED = 0.25;
+const DRIFT_AMOUNT = 0.25;
+const PARTICLE_FIELD_HEIGHT = objectsDistance * 7; // dots wrap within this
+
+const particlesMaterial = new THREE.ShaderMaterial({
+  transparent: true,
+  depthWrite: false,
+  uniforms: {
+    uColor: { value: new THREE.Color(parameters.materialColor) },
+    uScroll: { value: 0 }, // scrollY in viewports
+    uTime: { value: 0 }, // seconds, drives the idle drift
+    uScale: {
+      value: window.innerHeight * 0.5 * Math.min(window.devicePixelRatio, 2),
+    },
+  },
+  vertexShader: /* glsl */ `
+    uniform float uScroll;
+    uniform float uTime;
+    uniform float uScale;
+    attribute float aSize;
+    varying float vAlpha;
+
+    void main() {
+      vec3 pos = position;
+
+      // Idle drift: a slow looping sway, phase-shifted by position so
+      // neighbouring dots move slightly out of step
+      pos.x += sin(uTime * ${DRIFT_SPEED.toFixed(2)} + position.y * 0.7 + position.z * 0.5) * ${DRIFT_AMOUNT.toFixed(2)};
+      pos.y += cos(uTime * ${DRIFT_SPEED.toFixed(2)} * 0.8 + position.x * 0.5 + position.z * 0.6) * ${DRIFT_AMOUNT.toFixed(2)} * 0.6;
+
+      // Scroll parallax, wrapped so the field never runs out
+      float h = ${PARTICLE_FIELD_HEIGHT.toFixed(1)};
+      pos.y = mod(pos.y + uScroll * ${PARTICLE_SCROLL.toFixed(2)} + h * 0.5, h) - h * 0.5;
+
+      vec4 mv = modelViewMatrix * vec4(pos, 1.0);
+      float dist = -mv.z;
+
+      // Perspective size, same formula PointsMaterial uses
+      gl_PointSize = aSize * uScale / dist;
+      gl_Position = projectionMatrix * mv;
+
+      // Depth fade: far dots melt into the background, very near ones
+      // fade out instead of popping as big blobs
+      vAlpha = mix(0.9, 0.12, smoothstep(5.0, 11.0, dist))
+             * smoothstep(0.5, 2.0, dist);
+    }
+  `,
+  fragmentShader: /* glsl */ `
+    uniform vec3 uColor;
+    varying float vAlpha;
+
+    void main() {
+      // Round, soft-edged dot
+      float d = length(gl_PointCoord - 0.5);
+      float edge = 1.0 - smoothstep(0.25, 0.5, d);
+      gl_FragColor = vec4(uColor, vAlpha * edge);
+    }
+  `,
 });
 
 // Points
 const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+particles.frustumCulled = false; // the shader moves the dots
 scene.add(particles)
 
 /**
@@ -200,8 +279,12 @@ window.addEventListener("resize", () => {
   renderer.setSize(sizes.width, sizes.height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   
+  particlesMaterial.uniforms.uScale.value =
+    sizes.height * 0.5 * Math.min(window.devicePixelRatio, 2);
   // Update scroller position after resize
-  setTimeout(updateScroller, 100); // Small delay to ensure layout is updated
+  setTimeout(refreshScroller, 100); // Small delay to ensure layout is updated
+
+  measureLayout();
 });
 
 /**
@@ -237,70 +320,81 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 let scrollY = window.scrollY;
 let currentSection = 0;
 
+// Layout reads are cached: measuring on every scroll event forces a reflow
+const SCROLLER_SECTIONS = ["emmaherms", "publications", "ongoingProjects", "scienceCommunication"];
+const scrollerCache = { tops: [], dots: [] };
+let scrollerIndex = -1;
+
+const measureScroller = () => {
+  const sy = window.scrollY;
+  const navLinks = document.querySelectorAll(".navigator-link-container .caption");
+  const navEl = document.querySelector(".navigator");
+  if (!navEl || navLinks.length === 0) return;
+
+  const navTop = navEl.getBoundingClientRect().top;
+  scrollerCache.dots = Array.from(navLinks).map((link) => {
+    const r = link.getBoundingClientRect();
+    return r.top - navTop + r.height / 2 - 8; // Centre dot on text
+  });
+  scrollerCache.tops = SCROLLER_SECTIONS.map((id) => {
+    const el = document.getElementById(id);
+    return el ? el.getBoundingClientRect().top + sy : Infinity;
+  });
+};
+
 const updateScroller = () => {
   const scroller = document.getElementById("dot");
   if (!scroller) return;
-  
-  // Get all navigation links to calculate their positions
-  const navLinks = document.querySelectorAll('.navigator-link-container .caption');
-  if (navLinks.length === 0) return;
-  
-  // Get all section elements to calculate their positions
-  const sections = ['emmaherms', 'publications', 'ongoingProjects', 'scienceCommunication'];
-  const sectionElements = sections.map(id => document.getElementById(id)).filter(el => el !== null);
-  
-  if (sectionElements.length === 0) return;
-  
-  // Calculate the actual top positions of sections relative to document
-  const sectionTops = sectionElements.map(element => {
-    return element.offsetTop;
-  });
-  
-  // Calculate navigation link positions dynamically
-  const navPositions = Array.from(navLinks).map(link => {
-    const linkRect = link.getBoundingClientRect();
-    const navRect = document.querySelector('.navigator').getBoundingClientRect();
-    return linkRect.top - navRect.top + linkRect.height / 2 - 8; // Center dot on text
-  });
-  
-  // Find which section we're currently in - simple approach
-  let currentSectionIndex = 0;
-  const viewportMiddle = scrollY + window.innerHeight / 2;
-  
-  for (let i = sectionTops.length - 1; i >= 0; i--) {
-    if (viewportMiddle >= sectionTops[i]) {
-      currentSectionIndex = i;
+  if (scrollerCache.tops.length === 0) measureScroller();
+  const { tops, dots } = scrollerCache;
+  if (tops.length === 0) return;
+
+  // Which section is the middle of the viewport in?
+  let index = 0;
+  const viewportMiddle = window.scrollY + window.innerHeight / 2;
+  for (let i = tops.length - 1; i >= 0; i--) {
+    if (viewportMiddle >= tops[i]) {
+      index = i;
       break;
     }
   }
-  
-  // Simply jump to the correct navigation position - with smooth animation
-  const dotPosition = navPositions[currentSectionIndex];
-  
-  // Use GSAP for smooth animation
+
+  // Only animate when the active section actually changes
+  if (index === scrollerIndex) return;
+  scrollerIndex = index;
+
   gsap.to(scroller, {
-    top: dotPosition + "px",
+    top: dots[index] + "px",
     duration: 0.4,
-    ease: "power2.out"
+    ease: "power2.out",
+    overwrite: true,
   });
+};
+
+// Re-measure, then force the dot to re-evaluate
+const refreshScroller = () => {
+  measureScroller();
+  scrollerIndex = -1;
+  updateScroller();
 };
 
 window.addEventListener("scroll", () => {
   scrollY = window.scrollY;
   updateScroller();
+  hoverDirty = true; // models moved under a still cursor
 
   const newSection = Math.round(scrollY / sizes.height);
 
   if (newSection != currentSection) {
     currentSection = newSection;
   }
-});
+}, { passive: true });
 
 // Update scroller on resize as well since nav positions might change
 
 // Set initial scroller position after page load
 window.addEventListener("load", () => {
-  setTimeout(updateScroller, 100);
+  setTimeout(refreshScroller, 100);
 });
 
 // Set initial scroller position immediately
@@ -317,19 +411,18 @@ cursor.y = 0;
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
+// The hover raycast is the expensive part, so mousemove only records the
+// pointer and tick() does the raycast at most once per frame
+let hoverDirty = false;
+let hovering = false;
+
 window.addEventListener("mousemove", (event) => {
   cursor.x = event.clientX / sizes.width - 0.5;
   cursor.y = event.clientY / sizes.height - 0.5;
-  
-  // Check if hovering over 3D objects
   mouse.x = (event.clientX / sizes.width) * 2 - 1;
   mouse.y = -(event.clientY / sizes.height) * 2 + 1;
-  raycaster.setFromCamera(mouse, camera);
-  const intersects = raycaster.intersectObjects(sectionMeshes, true);
-  
-  // Change cursor when hovering over 3D objects
-  document.body.style.cursor = intersects.length > 0 ? "pointer" : "default";
-});
+  hoverDirty = true;
+}, { passive: true });
 
 // Color cycle for clicked meshes
 const colors = [
@@ -411,25 +504,84 @@ window.addEventListener("click", (event) => {
   }
 });
 
-const mediaQuery = "(max-width: 1000px)";
-const mediaQueryList = window.matchMedia(mediaQuery);
+/**
+ * Layout: where each anchor section leaves room for a model
+ */
+const NARROW_BREAKPOINT = 700; // matches the CSS text-width breakpoint
+const TEXT_WIDTH_FRACTION = 0.7; // .section p / h6 width on wide screens
 
-const handleChange = (event) => {
-  if (event.matches) {
-    // console.log("The window is now 1000px or under");
-    mesh1.position.x = 0.5;
-    mesh1.position.y = -objectsDistance * -0.3;
-    brain.scene.children[0].scale.set(0.005, 0.005, 0.005);
-  } else {
-    // console.log("The window is now over 1000px");
-    mesh1.position.x = 2;
-    mesh1.position.y = -objectsDistance * -0;
-    brain.scene.children[0].scale.set(0.004, 0.004, 0.004);
-  }
+const ORBIT_TILT = THREE.MathUtils.degToRad(20); // hero orbit angle
+
+const layout = {};
+
+const measureLayout = () => {
+  const sy = window.scrollY;
+  const narrow = sizes.width < NARROW_BREAKPOINT;
+
+  new Set(models.map((m) => m.anchor)).forEach((id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    const rect = el.getBoundingClientRect();
+    const style = getComputedStyle(el);
+    const padLeft = parseFloat(style.paddingLeft);
+    const padRight = parseFloat(style.paddingRight);
+    const contentWidth = rect.width - padLeft - padRight;
+
+    let centerX, sizePx, anchorY, orbitPx;
+    const heading = id === "emmaherms" && el.querySelector("h1");
+    if (heading) {
+      // Hero: the text block is vertically centred, which leaves a large empty
+      // band above it. Orbit the pair in the middle of that band.
+      const space = Math.max(heading.getBoundingClientRect().top - rect.top, 0);
+      centerX = rect.left + padLeft + contentWidth * 0.62; // nudged right of centre
+      sizePx = Math.min(space * 0.8, sizes.height * 0.4);
+      anchorY = space / 2; // relative to the section top, so it scrolls away
+      orbitPx = Math.min(contentWidth * 0.2, sizePx * 1.2);
+    } else if (narrow) {
+      // Text spans the full width: park a smaller model behind it
+      centerX = sizes.width * 0.72;
+      sizePx = Math.min(sizes.width * 0.45, sizes.height * 0.3);
+    } else {
+      // Centre the model in the empty space right of the text column
+      const freeLeft = rect.left + padLeft + contentWidth * TEXT_WIDTH_FRACTION;
+      const freeRight = sizes.width - sizes.width * 0.03;
+      const freeWidth = Math.max(freeRight - freeLeft, 0);
+      centerX = freeLeft + freeWidth / 2;
+      sizePx = Math.min(freeWidth * 0.9, sizes.height * 0.5);
+    }
+
+    layout[id] = {
+      top: rect.top + sy, // document-space, so it survives scrolling
+      height: rect.height,
+      centerX,
+      sizePx,
+      anchorY,
+      orbitPx,
+    };
+  });
 };
 
-mediaQueryList.addEventListener("change", handleChange);
-handleChange(mediaQueryList);
+// Section heights change with text reflow and font loading
+new ResizeObserver(() => {
+  measureLayout();
+  refreshScroller();
+}).observe(
+  document.getElementById("mainContainer")
+);
+measureLayout();
+
+// Pixel (viewport) position -> world position on the plane at depth z
+const camDist = camera.position.z;
+const tanHalfFov = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+const pxToWorld = (px, py, z) => {
+  const halfH = tanHalfFov * (camDist - z);
+  const halfW = halfH * camera.aspect;
+  return {
+    x: (px / sizes.width * 2 - 1) * halfW,
+    y: (1 - py / sizes.height * 2) * halfH,
+  };
+};
 
 /**
  * Animate
@@ -442,35 +594,74 @@ const tick = () => {
   const deltaTime = elapsedTime - previousTime;
   previousTime = elapsedTime;
 
-  // Animate camera
-  camera.position.y = (-scrollY / sizes.height) * objectsDistance;
+  // The camera stays put and the page scrolls normally; the particle field
+  // shifts with scroll in the vertex shader (depth-based parallax)
+  const sy = window.scrollY;
+  particlesMaterial.uniforms.uScroll.value = sy / sizes.height;
+  particlesMaterial.uniforms.uTime.value = elapsedTime;
 
-  const parallaxX = cursor.x * 0.5;
-  const parallaxY = -cursor.y * 0.5;
+  const parallaxX = cursor.x * 0.25;
+  const parallaxY = -cursor.y * 0.25;
   cameraGroup.position.x +=
     (parallaxX - cameraGroup.position.x) * 5 * deltaTime;
   cameraGroup.position.y +=
     (parallaxY - cameraGroup.position.y) * 5 * deltaTime;
 
-  // Animate meshes
-  sectionMeshes.forEach((mesh, i) => {
+  // Spin models
+  sectionMeshes.forEach((mesh) => {
     mesh.rotation.y += deltaTime * 0.2;
   });
 
-  // Animate brain and heart with orbital motion
-  const orbitRadius = 1;
-  const orbitSpeed = 0.3;
-  
-  // Brain orbits horizontally
-  const newBrainX = brainX + Math.cos(elapsedTime * orbitSpeed) * orbitRadius;
-  const newBrainZ = Math.sin(elapsedTime * orbitSpeed) * orbitRadius;
-  mesh1.position.set(newBrainX, brainY, newBrainZ);
+  // World units per pixel on the z = 0 plane
+  const perPx = (2 * tanHalfFov * camDist) / sizes.height;
 
-  
-  // Heart orbits horizontally
-  const newHeartX = heartX + Math.cos(elapsedTime * orbitSpeed + Math.PI) * orbitRadius;
-  const newHeartZ = Math.sin(elapsedTime * orbitSpeed + Math.PI) * orbitRadius;
-  mesh0.position.set(newHeartX, heartY, newHeartZ)
+  // Pin each model to its anchor section
+  models.forEach(({ pivot, anchor, scale, phase }) => {
+    const L = layout[anchor];
+    if (!L) return;
+
+    const sizePx = L.sizePx * scale;
+
+    // Stay centred in the viewport while the section is on screen, but never
+    // leave the section's own vertical bounds
+    const top = L.top - sy;
+    let cy;
+    if (L.anchorY !== undefined) {
+      cy = top + L.anchorY;
+    } else {
+      const minY = top + sizePx / 2;
+      const maxY = Math.max(minY, top + L.height - sizePx / 2);
+      cy = Math.min(Math.max(sizes.height / 2, minY), maxY);
+    }
+
+    let dxPx = 0;
+    let dyPx = 0;
+    let z = 0;
+    if (phase !== undefined) {
+      const angle = elapsedTime * 0.3 + phase;
+      // Tilt the orbit so it rises to the right instead of lying flat
+      const sweep = Math.cos(angle) * L.orbitPx;
+      dxPx = sweep * Math.cos(ORBIT_TILT);
+      dyPx = -sweep * Math.sin(ORBIT_TILT); // screen y grows downward
+      z = Math.sin(angle) * L.orbitPx * perPx;
+    }
+
+    const p = pxToWorld(L.centerX + dxPx, cy + dyPx, z);
+    pivot.position.set(p.x, p.y, z);
+    pivot.scale.setScalar(sizePx * perPx * pivot.userData.unit);
+  });
+
+
+  // Hover cursor: one raycast per frame, and only if something changed
+  if (hoverDirty) {
+    hoverDirty = false;
+    raycaster.setFromCamera(mouse, camera);
+    const hit = raycaster.intersectObjects(sectionMeshes, true).length > 0;
+    if (hit !== hovering) {
+      hovering = hit;
+      document.body.style.cursor = hit ? "pointer" : "default";
+    }
+  }
 
   // Render
   renderer.render(scene, camera);
